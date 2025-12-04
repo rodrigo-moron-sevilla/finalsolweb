@@ -1,0 +1,105 @@
+<div class="container my-5">
+  <h1 class="text-center mb-5 fw-bold">
+    <i class="bi bi-cart-fill text-danger me-2"></i>
+    Carrito de Compras
+  </h1>
+
+  <!-- Carrito Vacío -->
+  <div *ngIf="items.length === 0" class="text-center py-5">
+    <i class="bi bi-cart-x text-muted" style="font-size: 6rem;"></i>
+    <h3 class="mt-4 text-muted">Tu carrito está vacío</h3>
+    <p class="text-muted">¡Agrega productos deliciosos de nuestro menú!</p>
+    <a routerLink="/menu" class="btn btn-danger btn-lg mt-3">
+      <i class="bi bi-arrow-left me-2"></i>
+      Ir al Menú
+    </a>
+  </div>
+
+  <!-- Carrito con Items -->
+  <div *ngIf="items.length > 0" class="row">
+    <!-- Lista de productos -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm mb-4" *ngFor="let item of items">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-5">
+              <h5 class="fw-bold mb-1">{{ item.producto.nombre }}</h5>
+              <p class="text-muted small mb-0">{{ item.producto.descripcion }}</p>
+            </div>
+            <div class="col-md-2 text-center">
+              <span class="badge bg-danger fs-6">S/ {{ item.producto.precio.toFixed(2) }}</span>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group">
+                <button class="btn btn-outline-danger" (click)="disminuirCantidad(item)">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <input type="number" class="form-control text-center" 
+                       [value]="item.cantidad" 
+                       (change)="actualizarCantidad(item, $event)"
+                       min="1">
+                <button class="btn btn-outline-danger" (click)="aumentarCantidad(item)">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-2 text-end">
+              <h5 class="fw-bold text-danger mb-2">S/ {{ item.subtotal.toFixed(2) }}</h5>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminarItem(item)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-danger" (click)="limpiarCarrito()">
+        <i class="bi bi-trash-fill me-2"></i>
+        Vaciar Carrito
+      </button>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm sticky-top" style="top: 20px;">
+        <div class="card-header bg-danger text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-receipt me-2"></i>
+            Resumen del Pedido
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-3">
+            <span>Subtotal:</span>
+            <strong>S/ {{ total.toFixed(2) }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Delivery:</span>
+            <strong>S/ 5.00</strong>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-4">
+            <h5 class="mb-0">Total:</h5>
+            <h5 class="mb-0 text-danger">S/ {{ (total + 5).toFixed(2) }}</h5>
+          </div>
+
+          <!-- Usuario ID temporal (en producción vendría del login) -->
+          <div class="mb-3">
+            <label class="form-label small text-muted">Usuario ID (temporal)</label>
+            <input type="number" class="form-control" [(ngModel)]="usuarioId" min="1">
+          </div>
+
+          <button class="btn btn-danger w-100 btn-lg" (click)="realizarPedido()">
+            <i class="bi bi-bag-check-fill me-2"></i>
+            Realizar Pedido
+          </button>
+
+          <a routerLink="/menu" class="btn btn-outline-danger w-100 mt-2">
+            <i class="bi bi-arrow-left me-2"></i>
+            Seguir Comprando
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

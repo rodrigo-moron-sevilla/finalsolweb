@@ -1,0 +1,85 @@
+<div class="container my-5">
+  <h1 class="text-center mb-5 fw-bold">
+    <i class="bi bi-card-list text-danger me-2"></i>
+    Nuestro Menú
+  </h1>
+
+  <!-- Filtros por Categoría -->
+  <div class="text-center mb-5">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-danger" 
+              [class.active]="categoriaSeleccionada === 0"
+              (click)="filtrarPorCategoria(0)">
+        <i class="bi bi-grid-fill me-1"></i>
+        Todos
+      </button>
+      <button type="button" class="btn btn-outline-danger" 
+              *ngFor="let cat of categorias"
+              [class.active]="categoriaSeleccionada === cat.id"
+              (click)="filtrarPorCategoria(cat.id!)">
+        <i class="bi bi-tag-fill me-1"></i>
+        {{ cat.nombre }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-danger" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Lista de Productos -->
+  <div class="row g-4" *ngIf="!cargando">
+    <div class="col-md-6 col-lg-4" *ngFor="let producto of productosFiltrados">
+      <div class="card h-100 shadow-sm producto-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h5 class="card-title fw-bold mb-0">{{ producto.nombre }}</h5>
+            <span class="badge bg-danger rounded-pill fs-6">S/ {{ producto.precio.toFixed(2) }}</span>
+          </div>
+          <p class="card-text text-muted small">{{ producto.descripcion }}</p>
+          <div class="d-flex gap-2">
+            <button class="btn btn-danger flex-fill" (click)="agregarAlCarrito(producto)">
+              <i class="bi bi-cart-plus-fill me-1"></i>
+              Agregar
+            </button>
+            <button class="btn btn-outline-danger" (click)="verDetalle(producto)">
+              <i class="bi bi-info-circle-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay productos -->
+  <div *ngIf="!cargando && productosFiltrados.length === 0" class="text-center py-5">
+    <i class="bi bi-basket-fill text-muted" style="font-size: 5rem;"></i>
+    <h3 class="mt-3 text-muted">No hay productos disponibles</h3>
+  </div>
+</div>
+
+<!-- Modal de Detalle del Producto -->
+<div class="modal fade" id="productoModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" *ngIf="productoSeleccionado">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">{{ productoSeleccionado.nombre }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ productoSeleccionado.descripcion }}</p>
+        <h4 class="text-danger">S/ {{ productoSeleccionado.precio.toFixed(2) }}</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger" (click)="agregarAlCarritoYCerrar()">
+          <i class="bi bi-cart-plus-fill me-1"></i>
+          Agregar al Carrito
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

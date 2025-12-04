@@ -1,0 +1,16 @@
+.producto-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #dee2e6;
+}
+
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.2) !important;
+  border-color: #dc3545;
+}
+
+.btn-group .btn.active {
+  background-color: #dc3545;
+  color: white;
+}
